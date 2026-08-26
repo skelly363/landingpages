@@ -1,0 +1,21 @@
+/**
+ * Coach brand fonts — local copies from Tapestry design tokens.
+ * @see https://assets.tapestry.com/ux/design-tokens/coach/themes/europe/font-face.css
+ */
+@font-face {
+  font-family: HelveticaNeue73ExtendedBold;
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: url("/fonts/neue-helvetica-73-bold-extended.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: HelveticaNeue53ExtendedNormal;
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src:
+    local("Helvetica Neue LT Pro 53 Extended"),
+    url("/fonts/neue-helvetica-53-extended.woff2") format("woff2");
+}

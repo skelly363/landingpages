@@ -1,0 +1,341 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&icon_names=add,close,play_arrow,play_circle&display=block");
+@import "../styles/fonts.css";
+@import "tailwindcss";
+
+@theme inline {
+  --font-coach-extended-bold: "HelveticaNeue73ExtendedBold", Helvetica, Arial,
+    sans-serif;
+  --font-coach-extended: "HelveticaNeue53ExtendedNormal", Helvetica, Arial,
+    sans-serif;
+  --font-coach: var(--font-coach-extended);
+  --color-coach-black: #000001;
+  --color-coach-white: #ffffff;
+  --color-coach-spotify: #1ed760;
+
+  /* Fluid mobile grid: 12px margin | 12px gutter | 4 columns */
+  --page-width: 100%;
+  --spacing-margin: 12px;
+  --spacing-gutter: 12px;
+  --content-width: calc(100% - (var(--spacing-margin) * 2));
+  /* Carousel peek from the 375px Figma frame, kept as a fixed inset */
+  --carousel-peek-style: 23px;
+  --carousel-peek-playlist: 50px;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply bg-white text-coach-black font-coach-extended;
+    overflow-x: hidden;
+  }
+
+  /* Material Symbols Outlined — weight 300, fill off, grade 0, opsz 24 */
+  .material-symbols-outlined {
+    font-family: "Material Symbols Outlined", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
+    font-variation-settings:
+      "FILL" 0,
+      "wght" 300,
+      "GRAD" 0,
+      "opsz" 24;
+  }
+}
+
+@layer components {
+  .text-coach-display {
+    font-family: var(--font-coach-extended-bold);
+    font-size: 1.5rem;
+    line-height: normal;
+    letter-spacing: 0;
+  }
+
+  .text-coach-heading {
+    font-family: var(--font-coach-extended-bold);
+    font-size: 1.125rem;
+    line-height: normal;
+    letter-spacing: 0;
+  }
+
+  .text-coach-body {
+    font-family: var(--font-coach-extended);
+    font-size: 0.875rem;
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+  }
+
+  .text-coach-body-sm {
+    font-family: var(--font-coach-extended);
+    font-size: 0.75rem;
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+  }
+
+  .text-coach-eyebrow {
+    font-family: var(--font-coach-extended);
+    font-size: 0.625rem;
+    line-height: normal;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+}
+
+@layer utilities {
+  .font-coach-extended {
+    font-family: var(--font-coach-extended);
+  }
+
+  .font-coach-extended-bold {
+    font-family: var(--font-coach-extended-bold);
+  }
+
+  .max-w-page {
+    width: 100%;
+    max-width: none;
+  }
+
+  .w-carousel-style {
+    width: calc(100cqw - var(--spacing-margin) - var(--carousel-peek-style));
+  }
+
+  .w-carousel-playlist {
+    width: calc(100cqw - var(--spacing-margin) - var(--carousel-peek-playlist));
+  }
+
+  .max-w-content {
+    max-width: var(--content-width);
+  }
+
+  .px-margin {
+    padding-inline: var(--spacing-margin);
+  }
+
+  .pl-margin {
+    padding-left: var(--spacing-margin);
+  }
+
+  .pr-margin {
+    padding-right: var(--spacing-margin);
+  }
+
+  .scroll-pl-margin {
+    scroll-padding-left: var(--spacing-margin);
+  }
+
+  .scroll-pr-margin {
+    scroll-padding-right: var(--spacing-margin);
+  }
+
+  .mr-margin {
+    margin-right: var(--spacing-margin);
+  }
+
+  .gap-gutter {
+    gap: var(--spacing-gutter);
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Unlayered so motion isn't overridden by Tailwind transform utilities */
+.hotspot-plus {
+  transform: translate(-50%, -50%);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hotspot-plus:hover {
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.hotspot-plus:active {
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+.hotspot-plus.is-open {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.16);
+}
+
+.hotspot-plus-icon {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.hotspot-plus.is-open .hotspot-plus-icon {
+  transform: rotate(45deg);
+}
+
+.hotspot-card {
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  filter: blur(8px);
+  transform: translate(-50%, -50%) scale(0.82);
+  transform-origin: 50% 0%;
+  transition:
+    opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s linear 0.45s;
+}
+
+.hotspot-card[data-origin="right"] {
+  transform-origin: 88% 0%;
+}
+
+.hotspot-card[data-origin="left"] {
+  transform-origin: 12% 0%;
+}
+
+.hotspot-card[data-open="true"] {
+  pointer-events: auto;
+  opacity: 1;
+  visibility: visible;
+  filter: blur(0);
+  transform: translate(-50%, -50%) scale(1);
+  transition:
+    opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s linear 0s;
+}
+
+.hotspot-card-body > * {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hotspot-card[data-open="true"] .hotspot-card-body > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hotspot-card[data-open="true"] .hotspot-card-body > *:nth-child(1) {
+  transition-delay: 0.08s;
+}
+
+.hotspot-card[data-open="true"] .hotspot-card-body > *:nth-child(2) {
+  transition-delay: 0.14s;
+}
+
+/* Subtle luxury scroll: fade + rise + soft blur */
+.reveal:not(.reveal-stagger) {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  filter: blur(5px);
+  transition:
+    opacity 1.05s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+    transform 1.2s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms),
+    filter 1s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+}
+
+.reveal:not(.reveal-stagger).is-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0);
+}
+
+.reveal-media:not(.reveal-stagger) {
+  transform: none;
+  filter: none;
+  transition: opacity 1.35s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+}
+
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  filter: blur(4px);
+  transition:
+    opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.15s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-media.reveal-stagger > * {
+  transform: none;
+  filter: none;
+  transition: opacity 1.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-stagger.is-in > * {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0);
+}
+
+.reveal-stagger.is-in > *:nth-child(1) {
+  transition-delay: calc(var(--reveal-delay, 0ms) + 0ms);
+}
+.reveal-stagger.is-in > *:nth-child(2) {
+  transition-delay: calc(var(--reveal-delay, 0ms) + 90ms);
+}
+.reveal-stagger.is-in > *:nth-child(3) {
+  transition-delay: calc(var(--reveal-delay, 0ms) + 170ms);
+}
+.reveal-stagger.is-in > *:nth-child(4) {
+  transition-delay: calc(var(--reveal-delay, 0ms) + 240ms);
+}
+.reveal-stagger.is-in > *:nth-child(5) {
+  transition-delay: calc(var(--reveal-delay, 0ms) + 300ms);
+}
+.reveal-stagger.is-in > *:nth-child(6) {
+  transition-delay: calc(var(--reveal-delay, 0ms) + 350ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+
+  .hotspot-plus,
+  .hotspot-plus-icon,
+  .hotspot-card,
+  .hotspot-card-body > * {
+    transition: opacity 0.15s ease;
+    filter: none;
+  }
+
+  .hotspot-plus:hover,
+  .hotspot-plus:active {
+    transform: translate(-50%, -50%);
+  }
+
+  .hotspot-card,
+  .hotspot-card[data-open="true"] {
+    transform: translate(-50%, -50%);
+  }
+
+  .hotspot-card-body > * {
+    transform: none;
+  }
+}
