@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useId, useState } from "react";
 import { CarouselTrack, PageSection } from "@/components/layout/Grid";
 import { useCarouselProgress } from "@/hooks/useCarouselProgress";
 import { Button } from "@/components/ui/Button";
