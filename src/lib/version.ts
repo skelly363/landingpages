@@ -1,1 +1,1 @@
-export const PAGE_VERSION = "A" as const;
+export const PAGE_VERSION = "B" as const;
