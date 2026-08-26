@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { PAGE_VERSION } from "@/lib/version";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-page-version={PAGE_VERSION}>
       <head>
         <link
           rel="preload"
