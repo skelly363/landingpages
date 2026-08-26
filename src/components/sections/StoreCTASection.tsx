@@ -3,10 +3,14 @@ import { FullBleed } from "@/components/layout/Grid";
 import { MediaFrame } from "@/components/ui/MediaFrame";
 import { Reveal } from "@/components/ui/Reveal";
 import { SECTION_RATIOS } from "@/lib/aspect-ratios";
+import { SPACING } from "@/lib/spacing";
 
 export function StoreCTASection() {
   return (
-    <section className="relative w-full">
+    <section
+      className="relative w-full"
+      style={{ marginTop: SPACING.fullBleedCtaGap }}
+    >
       <Reveal media>
       <FullBleed>
         <MediaFrame
