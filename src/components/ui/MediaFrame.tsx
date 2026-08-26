@@ -14,6 +14,7 @@ type MediaFrameProps = {
   fullWidth?: boolean;
   className?: string;
   imageClassName?: string;
+  imageStyle?: ImageProps["style"];
   priority?: boolean;
   sizes?: string;
   children?: React.ReactNode;
@@ -27,6 +28,7 @@ export function MediaFrame({
   fullWidth = false,
   className = "",
   imageClassName = "object-cover",
+  imageStyle,
   priority,
   sizes,
   children,
@@ -45,6 +47,7 @@ export function MediaFrame({
         alt={alt}
         fill
         className={imageClassName}
+        style={imageStyle}
         sizes={sizes ?? (fullWidth ? "100vw" : `${width ?? 351}px`)}
         priority={priority}
       />

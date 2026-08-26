@@ -15,9 +15,9 @@ export type AspectRatio = keyof typeof ASPECT_RATIOS;
 /** Section → ratio mapping from Figma media asset spec */
 export const SECTION_RATIOS = {
   styleCarousel: "4:5",
-  videoHero: "9:16",
+  videoHero: "3:4",
   immerseGrid: "3:4",
-  tabbyTourBanner: "3:2",
+  tabbyTourBanner: "4:5",
   playlistCard: "4:5",
   fullBleedCta: "9:16",
 } as const satisfies Record<string, AspectRatio>;

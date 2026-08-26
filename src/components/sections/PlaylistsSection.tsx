@@ -1,25 +1,29 @@
 "use client";
 
+import { useId } from "react";
 import Image from "next/image";
 import { CarouselTrack, PageSection } from "@/components/layout/Grid";
+import { useCarouselProgress } from "@/hooks/useCarouselProgress";
+import { CarouselIndicator } from "@/components/ui/CarouselIndicator";
 import { MediaFrame } from "@/components/ui/MediaFrame";
 import { Reveal } from "@/components/ui/Reveal";
-import { SPACING } from "@/lib/spacing";
 import { SECTION_RATIOS } from "@/lib/aspect-ratios";
 
 const playlists = [
-  { image: "/images/playlist-1.jpg", label: "Tktkt", persona: "Persona" },
-  { image: "/images/playlist-2.jpg", label: "Tktkt", persona: "Persona" },
-  { image: "/images/playlist-3.jpg", label: "Tktkt", persona: "Persona" },
-  { image: "/images/playlist-4.jpg", label: "Tktkt", persona: "Persona" },
+  { image: "/images/playlist-1.jpg", name: "Playlist Name", label: "Tktkt", persona: "Persona" },
+  { image: "/images/playlist-2.jpg", name: "Playlist Name", label: "Tktkt", persona: "Persona" },
+  { image: "/images/playlist-3.jpg", name: "Playlist Name", label: "Tktkt", persona: "Persona" },
+  { image: "/images/playlist-4.jpg", name: "Playlist Name", label: "Tktkt", persona: "Persona" },
 ];
 
 function SpotifyCard({
   image,
+  name,
   label,
   persona,
 }: {
   image: string;
+  name: string;
   label: string;
   persona: string;
 }) {
@@ -32,10 +36,13 @@ function SpotifyCard({
         fullWidth
         sizes="calc(100vw - 62px)"
       >
+        <p className="absolute inset-x-0 top-6 z-10 text-center font-coach-extended-bold text-[10px] uppercase tracking-[0.14em] text-white">
+          {name}
+        </p>
         <div className="absolute inset-x-0 bottom-8 z-10 flex justify-center px-margin">
           <button
             type="button"
-            className="flex h-12 w-full items-center gap-2.5 rounded-lg border border-coach-spotify bg-black py-1 pl-1.5 pr-1.5"
+            className="flex h-12 w-full max-w-[249px] items-center gap-2.5 rounded-lg border border-coach-spotify bg-black py-1 pl-1.5 pr-1.5"
           >
             <Image
               src="/images/cloud.png"
@@ -64,34 +71,26 @@ function SpotifyCard({
 }
 
 export function PlaylistsSection() {
+  const labelId = useId();
+  const { progress, handleScroll } = useCarouselProgress();
+
   return (
-    <section className="pb-12 pt-8">
-      <PageSection>
-        <Reveal
-          stagger
-          className="flex flex-col"
-          style={{ gap: SPACING.headingToBody }}
-        >
-          <h2 className="text-coach-heading capitalize leading-snug">
-            Coach X Spotify Bring You Playlists
-          </h2>
-          <p className="text-coach-body">
-            Style and music help us express ourselves with confidence and
-            connect with one another. This season, Coach partners with Spotify to
-            bring you customized playlists inspired by your listening style.
-          </p>
-        </Reveal>
-
-        <div className="my-6 h-px bg-neutral-300" />
-      </PageSection>
-
+    <PageSection
+      bleed
+      aria-labelledby={labelId}
+      className="overflow-hidden pb-8"
+    >
+      <h2 id={labelId} className="sr-only">
+        Coach x Spotify playlists
+      </h2>
       <Reveal media>
-      <CarouselTrack className="pt-0">
-        {playlists.map((playlist, index) => (
-          <SpotifyCard key={`${playlist.image}-${index}`} {...playlist} />
-        ))}
-      </CarouselTrack>
+        <CarouselTrack onScroll={handleScroll}>
+          {playlists.map((playlist, index) => (
+            <SpotifyCard key={`${playlist.image}-${index}`} {...playlist} />
+          ))}
+        </CarouselTrack>
+        <CarouselIndicator total={playlists.length} progress={progress} />
       </Reveal>
-    </section>
+    </PageSection>
   );
 }

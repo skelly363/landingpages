@@ -1,4 +1,4 @@
-/** Section spacing derived from updated Figma frame (UXR A Mobile) */
+/** Section spacing derived from Figma frames (UXR A / UXR B Mobile) */
 export const SPACING = {
   /** Hero top padding */
   heroTop: 45,
@@ -10,4 +10,10 @@ export const SPACING = {
   copyToGrid: 24,
   /** Immerse copy line length — wraps just inside the page margins */
   immerseCopyWidth: 300,
+  /** Watch the Film stack (eyebrow → headline → media → copy) */
+  filmStack: 24,
+  /** Tabby Tour copy block to date list */
+  tourCopyToDates: 64,
+  /** Tabby Tour date row gap */
+  tourDateGap: 44,
 } as const;

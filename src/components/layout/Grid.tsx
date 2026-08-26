@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode, UIEventHandler } from "react";
+import { forwardRef, type CSSProperties, type HTMLAttributes, type ReactNode, type UIEventHandler } from "react";
 
 type PageSectionProps = {
   children: ReactNode;
@@ -6,7 +6,7 @@ type PageSectionProps = {
   style?: CSSProperties;
   /** Full-bleed sections skip horizontal padding (images, carousels) */
   bleed?: boolean;
-};
+} & HTMLAttributes<HTMLElement>;
 
 export function MobilePage({ children }: { children: ReactNode }) {
   return (
@@ -21,11 +21,13 @@ export function PageSection({
   className = "",
   style,
   bleed = false,
+  ...rest
 }: PageSectionProps) {
   return (
     <section
       className={bleed ? className : `px-margin ${className}`}
       style={style}
+      {...rest}
     >
       {children}
     </section>
@@ -79,17 +81,17 @@ export function GridCol({
 }
 
 /** Horizontal scroll track — 12px inset on both sides via spacers (reliable across browsers) */
-export function CarouselTrack({
-  children,
-  className = "",
-  onScroll,
-}: {
-  children: ReactNode;
-  className?: string;
-  onScroll?: UIEventHandler<HTMLDivElement>;
-}) {
+export const CarouselTrack = forwardRef<
+  HTMLDivElement,
+  {
+    children: ReactNode;
+    className?: string;
+    onScroll?: UIEventHandler<HTMLDivElement>;
+  }
+>(function CarouselTrack({ children, className = "", onScroll }, ref) {
   return (
     <div
+      ref={ref}
       className={`flex w-full gap-gutter overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide scroll-pl-margin scroll-pr-margin ${className}`}
       onScroll={onScroll}
     >
@@ -106,4 +108,6 @@ export function CarouselTrack({
       />
     </div>
   );
-}
+});
+
+CarouselTrack.displayName = "CarouselTrack";

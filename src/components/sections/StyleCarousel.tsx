@@ -1,37 +1,31 @@
 "use client";
 
-import { useCallback, useId, useRef, useState } from "react";
-import type { UIEvent } from "react";
+import { useId } from "react";
 import { CarouselTrack, PageSection } from "@/components/layout/Grid";
+import { useCarouselProgress } from "@/hooks/useCarouselProgress";
+import { Button } from "@/components/ui/Button";
 import { CarouselIndicator } from "@/components/ui/CarouselIndicator";
 import {
   HotspotDetailCard,
   type HotspotDetailContent,
 } from "@/components/ui/HotspotDetailCard";
-import { HotspotButton } from "@/components/ui/HotspotButton";
 import { Icon } from "@/components/ui/Icon";
 import { MediaFrame } from "@/components/ui/MediaFrame";
 import { Reveal } from "@/components/ui/Reveal";
 import { SECTION_RATIOS } from "@/lib/aspect-ratios";
 
-type HotspotPosition = {
-  top: string;
-  left: string;
-};
-
 type StyleSlide = {
   id: string;
   image: string;
   alt: string;
-  variant: "intro" | "film" | "hotspot";
+  variant: "intro" | "film" | "cta";
   title?: string;
   description?: string;
   filmTitle?: string;
-  hotspot?: HotspotPosition;
+  ctaLabel?: string;
   detailCard?: HotspotDetailContent;
 };
 
-/** Positions from Figma carousel frames (340×420) */
 const slides: StyleSlide[] = [
   {
     id: "style-story",
@@ -46,8 +40,8 @@ const slides: StyleSlide[] = [
     id: "tabby-cream",
     image: "/images/hero-product.jpg",
     alt: "Cream Tabby bag",
-    variant: "hotspot",
-    hotspot: { top: "32%", left: "71%" },
+    variant: "cta",
+    ctaLabel: "Tabbys, Inspired by the Cast",
     detailCard: {
       title: "Tabbys, Inspired by the Cast",
       description:
@@ -66,21 +60,14 @@ const slides: StyleSlide[] = [
     id: "coach-tags",
     image: "/images/hero-video.jpg",
     alt: "Coach bag charms and tags",
-    variant: "hotspot",
-    hotspot: { top: "27%", left: "28%" },
-    detailCard: {
-      title: "Your Ticket to Personalization",
-      description:
-        "Be a part of the moment with concert ticket charms that make any bag feel unique to you.",
-      linkLabel: "Shop Charms",
-    },
+    variant: "intro",
   },
   {
     id: "tabby-navy",
     image: "/images/hero-product-c.jpg",
     alt: "Navy studded Tabby bag",
-    variant: "hotspot",
-    hotspot: { top: "27%", left: "34%" },
+    variant: "cta",
+    ctaLabel: "Tabbys, Inspired by the Cast",
     detailCard: {
       title: "Tabbys, Inspired by the Cast",
       description:
@@ -105,32 +92,33 @@ function CarouselSlide({ slide }: { slide: StyleSlide }) {
         priority={slide.id === "style-story"}
         sizes="calc(100vw - 35px)"
       >
-        {slide.hotspot && slide.detailCard && (
+        {slide.variant === "cta" && slide.detailCard && (
           <>
-            <HotspotButton
-              top={slide.hotspot.top}
-              left={slide.hotspot.left}
-              label={`View ${slide.detailCard.title}`}
-              isOpen={cardOpen}
-              controlsId={detailCardId}
-              onClick={() => setCardOpen((open) => !open)}
-            />
             <HotspotDetailCard
               id={detailCardId}
               open={cardOpen}
-              origin={parseFloat(slide.hotspot.left) > 50 ? "right" : "left"}
+              origin="bottom"
+              onClose={() => setCardOpen(false)}
               {...slide.detailCard}
             />
+            <div className="absolute inset-x-0 bottom-3 z-10 flex justify-center px-3">
+              <Button
+                size="compact"
+                onClick={() => setCardOpen((open) => !open)}
+                aria-expanded={cardOpen}
+                aria-controls={detailCardId}
+              >
+                {slide.ctaLabel}
+              </Button>
+            </div>
           </>
         )}
 
-        {slide.variant === "intro" && (
+        {slide.variant === "intro" && slide.title && (
           <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/50 to-transparent px-4 pb-6 pt-16 text-white">
             <Reveal stagger delay={200}>
-            <h2 className="font-coach-extended-bold text-base">{slide.title}</h2>
-            <p className="mt-2 text-coach-body-sm">
-              {slide.description}
-            </p>
+              <h2 className="font-coach-extended-bold text-base">{slide.title}</h2>
+              <p className="mt-2 text-coach-body-sm">{slide.description}</p>
             </Reveal>
           </div>
         )}
@@ -158,27 +146,18 @@ function CarouselSlide({ slide }: { slide: StyleSlide }) {
 }
 
 export function StyleCarousel() {
-  const [progress, setProgress] = useState(0);
-  const frame = useRef(0);
-
-  const handleScroll = useCallback((event: UIEvent<HTMLDivElement>) => {
-    const track = event.currentTarget;
-    const max = track.scrollWidth - track.clientWidth;
-    const next = max > 0 ? Math.min(1, Math.max(0, track.scrollLeft / max)) : 0;
-    cancelAnimationFrame(frame.current);
-    frame.current = requestAnimationFrame(() => setProgress(next));
-  }, []);
+  const { progress, handleScroll } = useCarouselProgress();
 
   return (
     <PageSection bleed aria-label="Style carousel" className="overflow-hidden">
       <Reveal media delay={80}>
-      <CarouselTrack onScroll={handleScroll}>
-        {slides.map((slide) => (
-          <CarouselSlide key={slide.id} slide={slide} />
-        ))}
-      </CarouselTrack>
+        <CarouselTrack onScroll={handleScroll}>
+          {slides.map((slide) => (
+            <CarouselSlide key={slide.id} slide={slide} />
+          ))}
+        </CarouselTrack>
 
-      <CarouselIndicator total={slides.length} progress={progress} />
+        <CarouselIndicator total={slides.length} progress={progress} />
       </Reveal>
     </PageSection>
   );

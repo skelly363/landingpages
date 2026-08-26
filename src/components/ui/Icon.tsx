@@ -11,8 +11,11 @@ export const MATERIAL_SYMBOL_SETTINGS = {
 export type MaterialIconName =
   | "add"
   | "close"
+  | "pause"
   | "play_arrow"
-  | "play_circle";
+  | "play_circle"
+  | "volume_off"
+  | "volume_up";
 
 type IconProps = {
   name: MaterialIconName;

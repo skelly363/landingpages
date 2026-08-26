@@ -1,8 +1,15 @@
-import Image from "next/image";
+"use client";
+
+import { useCallback, useEffect, useRef } from "react";
 import { TextLink } from "@/components/ui/Button";
 import { MediaFrame } from "@/components/ui/MediaFrame";
 import { Reveal } from "@/components/ui/Reveal";
-import { Grid, GridCol, PageSection, FullBleed } from "@/components/layout/Grid";
+import {
+  CarouselTrack,
+  Grid,
+  GridCol,
+  PageSection,
+} from "@/components/layout/Grid";
 import { SPACING } from "@/lib/spacing";
 import { SECTION_RATIOS } from "@/lib/aspect-ratios";
 
@@ -12,30 +19,104 @@ const tourDates = [
   { date: "29 September", city: "San Francisco" },
 ];
 
-export function TabbyTourSection() {
+const tourImages = [
+  { src: "/images/tabby-tour.jpg", alt: "The Tabby Tour campaign" },
+  { src: "/images/tour-bus.jpg", alt: "Inside the Coach x Spotify tour bus" },
+  { src: "/images/playlist-1.jpg", alt: "Tabby Tour live styling" },
+  { src: "/images/tour-crowd.jpg", alt: "Tabby Tour crowd" },
+];
+
+function tourCardWidth(track: HTMLDivElement) {
+  const card = track.querySelector("article");
+  if (!card) return 0;
+  return card.clientWidth;
+}
+
+function tourGap(track: HTMLDivElement) {
+  const gap = Number.parseFloat(getComputedStyle(track).gap);
+  if (Number.isNaN(gap)) return 12;
+  return gap;
+}
+
+function nextTourOffset(track: HTMLDivElement) {
+  const next = track.scrollLeft + tourCardWidth(track) + tourGap(track);
+  const max = track.scrollWidth - track.clientWidth - 8;
+  if (next >= max) return 0;
+  return next;
+}
+
+function TourDateList() {
   return (
-    <section className="w-full pb-16">
-      <Reveal media>
-      <FullBleed>
-        <MediaFrame
-          src="/images/tabby-tour.jpg"
-          alt="Coach x Spotify Tabby Tour"
-          ratio={SECTION_RATIOS.tabbyTourBanner}
-          fullWidth
-          sizes="100vw"
-          className="w-full max-w-none"
+    <Reveal
+      as="ul"
+      stagger
+      className="flex flex-col"
+      style={{ marginTop: SPACING.tourCopyToDates }}
+    >
+      {tourDates.map((stop) => (
+        <li
+          key={stop.city}
+          className="border-b border-[#B4B4B4] py-6 last:border-b-0"
         >
-          <div className="absolute inset-x-0 bottom-0 flex justify-center px-margin pb-4">
-            <Image
-              src="/images/coach-logo.svg"
-              alt="Coach x Spotify Tabby Tour"
-              width={280}
-              height={80}
-              className="w-[min(85%,280px)] brightness-0 invert"
-            />
-          </div>
-        </MediaFrame>
-      </FullBleed>
+          <Grid className="text-coach-body">
+            <GridCol span={2}>
+              <span className="font-coach-extended-bold">{stop.date}</span>
+            </GridCol>
+            <GridCol span={2} className="text-right">
+              <span>{stop.city}</span>
+            </GridCol>
+          </Grid>
+        </li>
+      ))}
+    </Reveal>
+  );
+}
+
+export function TabbyTourSection() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const userPaused = useRef(false);
+  const pauseTimer = useRef(0);
+
+  const handleScroll = useCallback(() => {
+    userPaused.current = true;
+    window.clearTimeout(pauseTimer.current);
+    pauseTimer.current = window.setTimeout(() => {
+      userPaused.current = false;
+    }, 8000);
+  }, []);
+
+  useEffect(() => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) return;
+
+    const id = window.setInterval(() => {
+      const track = trackRef.current;
+      if (!track || userPaused.current) return;
+      track.scrollTo({ left: nextTourOffset(track), behavior: "smooth" });
+    }, 4000);
+
+    return () => window.clearInterval(id);
+  }, []);
+
+  return (
+    <section className="w-full pb-8 pt-8">
+      <Reveal media>
+        <CarouselTrack ref={trackRef} onScroll={handleScroll}>
+          {tourImages.map((image) => (
+            <article
+              key={image.src}
+              className="w-carousel-style shrink-0 snap-start"
+            >
+              <MediaFrame
+                src={image.src}
+                alt={image.alt}
+                ratio={SECTION_RATIOS.tabbyTourBanner}
+                fullWidth
+                sizes="calc(100vw - 35px)"
+              />
+            </article>
+          ))}
+        </CarouselTrack>
       </Reveal>
 
       <PageSection className="pt-[30px]">
@@ -49,30 +130,15 @@ export function TabbyTourSection() {
           </h2>
           <p className="text-coach-body leading-[1.4]">
             Experience the campaign in person as Coach and Spotify take the
-            season around the world with live music, styling, personalization
-            and more human moments in between.
+            season around the world with live music, styling, personalization.
           </p>
         </Reveal>
 
-        <Reveal delay={120} className="mt-4 flex gap-6 text-coach-body">
+        <Reveal delay={120} className="mt-4">
           <TextLink href="#">Follow the Tour</TextLink>
-          <TextLink href="#">Discover More</TextLink>
         </Reveal>
 
-        <Reveal as="ul" stagger className="mt-10">
-          {tourDates.map((stop) => (
-            <li key={stop.city} className="border-b border-neutral-300 py-6 last:border-b-0">
-              <Grid className="text-coach-body">
-                <GridCol span={2}>
-                  <span className="font-coach-extended-bold">{stop.date}</span>
-                </GridCol>
-                <GridCol span={2} className="text-right">
-                  <span>{stop.city}</span>
-                </GridCol>
-              </Grid>
-            </li>
-          ))}
-        </Reveal>
+        <TourDateList />
       </PageSection>
     </section>
   );
