@@ -59,7 +59,7 @@ export function TabbyTourSection() {
           <TextLink href="#">Discover More</TextLink>
         </Reveal>
 
-        <Reveal as="ul" stagger className="mt-16">
+        <Reveal as="ul" stagger className="mt-10">
           {tourDates.map((stop) => (
             <li key={stop.city} className="border-b border-neutral-300 py-6 last:border-b-0">
               <Grid className="text-coach-body">

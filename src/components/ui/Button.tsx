@@ -23,7 +23,7 @@ export function Button({
 
   return (
     <Link href={href} className={`${base} ${variants[variant]} ${className}`}>
-      {children}
+      <span className="translate-y-[2px]">{children}</span>
       <Icon name="add" size={18} />
     </Link>
   );
@@ -41,7 +41,7 @@ export function TextLink({
   return (
     <Link
       href={href}
-      className={`inline-block w-fit text-coach-body leading-none no-underline border-b border-current pb-2 ${className}`}
+      className={`inline-block w-fit text-coach-body leading-none no-underline border-b border-current pb-1.5 ${className}`}
     >
       {children}
     </Link>
