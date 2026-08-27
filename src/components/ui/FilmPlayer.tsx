@@ -21,16 +21,8 @@ type FilmPlayerProps = {
 function applyMute(video: HTMLVideoElement | null, muted: boolean) {
   if (!video) return;
   video.muted = muted;
+  video.defaultMuted = muted;
   video.volume = 1;
-}
-
-function toggleVideoPlayback(video: HTMLVideoElement | null) {
-  if (!video) return;
-  if (video.paused) {
-    void video.play();
-    return;
-  }
-  video.pause();
 }
 
 function PlayButton({
@@ -80,6 +72,7 @@ export function FilmPlayer({
   videoStyle,
 }: FilmPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const userPausedRef = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
 
@@ -87,33 +80,84 @@ export function FilmPlayer({
     setPlaying(!videoRef.current?.paused);
   }, []);
 
+  const tryPlay = useCallback(() => {
+    const video = videoRef.current;
+    if (!video || userPausedRef.current) return;
+    applyMute(video, muted);
+    video.playsInline = true;
+    void video.play().catch(() => {
+      // Browsers may block autoplay until the clip is on screen.
+    });
+  }, [muted]);
+
   useEffect(() => {
     applyMute(videoRef.current, muted);
   }, [muted]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    tryPlay();
+    video.addEventListener("canplay", tryPlay);
+    video.addEventListener("loadeddata", tryPlay);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) tryPlay();
+      },
+      { threshold: 0.2 },
+    );
+    observer.observe(video);
+
+    return () => {
+      video.removeEventListener("canplay", tryPlay);
+      video.removeEventListener("loadeddata", tryPlay);
+      observer.disconnect();
+    };
+  }, [tryPlay]);
+
   return (
     <div className={`relative w-full overflow-hidden bg-black ${ratioClass}`}>
-      <video
-        ref={videoRef}
-        className={`absolute inset-0 h-full w-full object-cover ${videoClassName}`}
+      <div
+        className={`absolute inset-0 ${videoClassName}`}
         style={videoStyle}
-        src={src}
-        poster={poster}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        aria-label={ariaLabel}
-        onPlay={syncPlayback}
-        onPause={syncPlayback}
-      />
+      >
+        <video
+          ref={videoRef}
+          className="h-full w-full object-cover"
+          src={src}
+          poster={poster}
+          autoPlay
+          muted={muted}
+          loop
+          playsInline
+          preload="auto"
+          aria-label={ariaLabel}
+          onPlay={syncPlayback}
+          onPause={syncPlayback}
+          onLoadedData={tryPlay}
+        />
+      </div>
       <div className="absolute bottom-3 right-3 z-20 flex items-center gap-1 rounded-full bg-black/45 px-2 py-1.5 text-white backdrop-blur-[6px]">
         <PlayButton
           playing={playing}
-          onClick={() => toggleVideoPlayback(videoRef.current)}
+          onClick={() => {
+            const video = videoRef.current;
+            if (!video) return;
+            if (video.paused) {
+              userPausedRef.current = false;
+              void video.play();
+              return;
+            }
+            userPausedRef.current = true;
+            video.pause();
+          }}
         />
-        <MuteButton muted={muted} onClick={() => setMuted((current) => !current)} />
+        <MuteButton
+          muted={muted}
+          onClick={() => setMuted((current) => !current)}
+        />
       </div>
     </div>
   );

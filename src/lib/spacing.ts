@@ -10,6 +10,6 @@ export const SPACING = {
   copyToGrid: 24,
   /** Immerse copy line length — wraps just inside the page margins */
   immerseCopyWidth: 300,
-  /** Gap between the two full-bleed CTAs at the bottom of the page */
-  fullBleedCtaGap: 12,
+  /** Hairline between the two full-bleed CTAs at the bottom of the page */
+  fullBleedCtaGap: 2,
 } as const;
