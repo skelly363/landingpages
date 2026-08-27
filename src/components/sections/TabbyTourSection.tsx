@@ -120,14 +120,10 @@ export function TabbyTourSection() {
       </Reveal>
 
       <PageSection className="pt-[30px]">
-        <Reveal
-          stagger
-          className="flex flex-col"
-          style={{ gap: SPACING.headingToBody }}
-        >
-          <h2 className="text-coach-body font-coach-extended-bold leading-[1.4]">
-            The Tabby Tour: Live Your Story
-          </h2>
+        <h2 className="text-coach-body font-coach-extended-bold leading-[1.4]">
+          The Tabby Tour: Live Your Story
+        </h2>
+        <Reveal className="mt-4">
           <p className="text-coach-body leading-[1.4]">
             Experience the campaign in person as Coach and Spotify take the
             season around the world with live music, styling, personalization.

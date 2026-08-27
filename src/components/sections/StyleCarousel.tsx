@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { CarouselTrack, PageSection } from "@/components/layout/Grid";
 import { HeroIntro } from "@/components/sections/HeroIntro";
 import { useCarouselProgress } from "@/hooks/useCarouselProgress";
@@ -79,23 +79,34 @@ const slides: StyleSlide[] = [
   },
 ];
 
-/** Extra viewport-heights of vertical scroll per slide after the first */
-const SLIDE_SCROLL_VH = 0.7;
+const SLIDE_COUNT = slides.length;
 
-function CarouselSlide({ slide }: { slide: StyleSlide }) {
+function CarouselSlide({
+  slide,
+  fillViewport,
+}: {
+  slide: StyleSlide;
+  fillViewport?: boolean;
+}) {
   const [cardOpen, setCardOpen] = useState(false);
   const detailCardId = useId();
-  const ratio = SECTION_RATIOS.styleCarousel;
 
   return (
-    <article className="w-carousel-style shrink-0 snap-start">
+    <article
+      className={
+        fillViewport
+          ? "h-full w-[calc(100cqw-var(--spacing-margin)-var(--carousel-peek-style))] shrink-0"
+          : "w-carousel-style shrink-0 snap-start"
+      }
+    >
       <MediaFrame
         src={slide.image}
         alt={slide.alt}
-        ratio={ratio}
+        ratio={fillViewport ? undefined : SECTION_RATIOS.styleCarousel}
         fullWidth
         priority={slide.id === "style-story"}
         sizes="calc(100vw - 35px)"
+        className={fillViewport ? "h-full w-full" : undefined}
       >
         {slide.variant === "cta" && slide.detailCard && (
           <>
@@ -150,10 +161,6 @@ function CarouselSlide({ slide }: { slide: StyleSlide }) {
   );
 }
 
-function SlideList() {
-  return slides.map((slide) => <CarouselSlide key={slide.id} slide={slide} />);
-}
-
 function NativeStyleCarousel() {
   const { progress, handleScroll } = useCarouselProgress();
 
@@ -162,9 +169,11 @@ function NativeStyleCarousel() {
       <HeroIntro />
       <PageSection bleed aria-label="Style carousel" className="overflow-hidden">
         <CarouselTrack onScroll={handleScroll}>
-          <SlideList />
+          {slides.map((slide) => (
+            <CarouselSlide key={slide.id} slide={slide} />
+          ))}
         </CarouselTrack>
-        <CarouselIndicator total={slides.length} progress={progress} />
+        <CarouselIndicator total={SLIDE_COUNT} progress={progress} />
       </PageSection>
     </>
   );
@@ -172,51 +181,30 @@ function NativeStyleCarousel() {
 
 function ForcedStyleCarousel() {
   const sectionRef = useRef<HTMLElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const progress = useForcedScrollProgress(sectionRef);
-  const [maxOffset, setMaxOffset] = useState(0);
-  const [sectionHeight, setSectionHeight] = useState("auto");
-
-  useLayoutEffect(() => {
-    const panel = panelRef.current;
-    const track = trackRef.current;
-    const viewport = viewportRef.current;
-    if (!panel || !track || !viewport) return;
-
-    const measure = () => {
-      setMaxOffset(Math.max(0, track.scrollWidth - viewport.clientWidth));
-      const extra = (slides.length - 1) * window.innerHeight * SLIDE_SCROLL_VH;
-      setSectionHeight(`${panel.offsetHeight + extra}px`);
-    };
-
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, []);
+  const thumbRef = useRef<HTMLDivElement>(null);
+  useForcedScrollProgress(sectionRef, trackRef, thumbRef, SLIDE_COUNT);
 
   return (
     <section
       ref={sectionRef}
       aria-label="Style carousel"
       className="relative"
-      style={{ height: sectionHeight }}
+      style={{ height: `calc(${SLIDE_COUNT} * 100dvh)` }}
     >
-      <div ref={panelRef} className="sticky top-0 z-20 bg-white">
-        <HeroIntro />
-        <div ref={viewportRef} className="overflow-hidden">
+      <div className="sticky top-0 z-20 flex h-dvh flex-col overflow-hidden bg-white">
+        <HeroIntro compact />
+        <div className="min-h-0 flex-1 overflow-hidden">
           <div
             ref={trackRef}
-            className="flex w-max touch-pan-y gap-gutter px-margin"
-            style={{
-              transform: `translate3d(-${progress * maxOffset}px, 0, 0)`,
-            }}
+            className="flex h-full touch-pan-y gap-gutter px-margin will-change-transform"
           >
-            <SlideList />
+            {slides.map((slide) => (
+              <CarouselSlide key={slide.id} slide={slide} fillViewport />
+            ))}
           </div>
         </div>
-        <CarouselIndicator total={slides.length} progress={progress} />
+        <CarouselIndicator total={SLIDE_COUNT} progress={0} thumbRef={thumbRef} />
       </div>
     </section>
   );

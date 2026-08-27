@@ -27,12 +27,12 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   body {
     @apply bg-white text-coach-black font-coach-extended;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   /* Material Symbols Outlined — weight 300, fill off, grade 0, opsz 24 */

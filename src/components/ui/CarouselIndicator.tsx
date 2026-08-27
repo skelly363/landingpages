@@ -1,3 +1,5 @@
+import type { Ref } from "react";
+
 type CarouselIndicatorProps = {
   /** Total number of slides */
   total: number;
@@ -5,12 +7,14 @@ type CarouselIndicatorProps = {
   active?: number;
   /** 0–1 scroll progress; when set, the thumb tracks the carousel continuously */
   progress?: number;
+  thumbRef?: Ref<HTMLDivElement>;
 };
 
 export function CarouselIndicator({
   total,
   active = 0,
   progress,
+  thumbRef,
 }: CarouselIndicatorProps) {
   const segmentPercent = 100 / total;
   const travel = 100 - segmentPercent;
@@ -18,9 +22,10 @@ export function CarouselIndicator({
     progress != null ? travel * progress : segmentPercent * active;
 
   return (
-    <div className="mb-6 mt-4 px-margin" aria-hidden>
+    <div className="mb-5 mt-3 px-margin" aria-hidden>
       <div className="relative h-[3px] w-full rounded-full bg-neutral-300">
         <div
+          ref={thumbRef}
           className="absolute top-0 h-full rounded-full bg-coach-black"
           style={{
             width: `${segmentPercent}%`,

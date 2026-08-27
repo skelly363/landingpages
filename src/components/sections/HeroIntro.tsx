@@ -2,10 +2,13 @@ import { SPACING } from "@/lib/spacing";
 import { PageSection } from "@/components/layout/Grid";
 import { Reveal } from "@/components/ui/Reveal";
 
-export function HeroIntro() {
+export function HeroIntro({ compact = false }: { compact?: boolean }) {
   return (
     <PageSection
-      style={{ paddingTop: SPACING.heroTop, paddingBottom: SPACING.heroBottom }}
+      style={{
+        paddingTop: compact ? 20 : SPACING.heroTop,
+        paddingBottom: compact ? 16 : SPACING.heroBottom,
+      }}
     >
       <Reveal
         stagger

@@ -7,7 +7,7 @@ import {
 type MediaFrameProps = {
   src: string;
   alt: string;
-  ratio: AspectRatio;
+  ratio?: AspectRatio;
   /** Fixed width in px — height is derived from ratio */
   width?: number;
   /** Fill parent width instead of fixed width */
@@ -33,7 +33,7 @@ export function MediaFrame({
   sizes,
   children,
 }: MediaFrameProps) {
-  const ratioClass = ASPECT_RATIOS[ratio];
+  const ratioClass = ratio ? ASPECT_RATIOS[ratio] : "";
 
   return (
     <div
