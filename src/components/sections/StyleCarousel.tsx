@@ -1,8 +1,10 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { CarouselTrack, PageSection } from "@/components/layout/Grid";
+import { HeroIntro } from "@/components/sections/HeroIntro";
 import { useCarouselProgress } from "@/hooks/useCarouselProgress";
+import { useForcedScrollProgress } from "@/hooks/useForcedScrollProgress";
 import { Button } from "@/components/ui/Button";
 import { CarouselIndicator } from "@/components/ui/CarouselIndicator";
 import {
@@ -77,6 +79,9 @@ const slides: StyleSlide[] = [
   },
 ];
 
+/** Extra viewport-heights of vertical scroll per slide after the first */
+const SLIDE_SCROLL_VH = 0.7;
+
 function CarouselSlide({ slide }: { slide: StyleSlide }) {
   const [cardOpen, setCardOpen] = useState(false);
   const detailCardId = useId();
@@ -101,7 +106,7 @@ function CarouselSlide({ slide }: { slide: StyleSlide }) {
               onClose={() => setCardOpen(false)}
               {...slide.detailCard}
             />
-            <div className="absolute inset-x-0 bottom-3 z-10 flex justify-center px-3">
+            <div className="absolute inset-x-0 bottom-3 z-10 flex justify-end px-3">
               <Button
                 size="compact"
                 onClick={() => setCardOpen((open) => !open)}
@@ -145,20 +150,87 @@ function CarouselSlide({ slide }: { slide: StyleSlide }) {
   );
 }
 
-export function StyleCarousel() {
+function SlideList() {
+  return slides.map((slide) => <CarouselSlide key={slide.id} slide={slide} />);
+}
+
+function NativeStyleCarousel() {
   const { progress, handleScroll } = useCarouselProgress();
 
   return (
-    <PageSection bleed aria-label="Style carousel" className="overflow-hidden">
-      <Reveal media delay={80}>
+    <>
+      <HeroIntro />
+      <PageSection bleed aria-label="Style carousel" className="overflow-hidden">
         <CarouselTrack onScroll={handleScroll}>
-          {slides.map((slide) => (
-            <CarouselSlide key={slide.id} slide={slide} />
-          ))}
+          <SlideList />
         </CarouselTrack>
-
         <CarouselIndicator total={slides.length} progress={progress} />
-      </Reveal>
-    </PageSection>
+      </PageSection>
+    </>
   );
+}
+
+function ForcedStyleCarousel() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const progress = useForcedScrollProgress(sectionRef);
+  const [maxOffset, setMaxOffset] = useState(0);
+  const [sectionHeight, setSectionHeight] = useState("auto");
+
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    const track = trackRef.current;
+    const viewport = viewportRef.current;
+    if (!panel || !track || !viewport) return;
+
+    const measure = () => {
+      setMaxOffset(Math.max(0, track.scrollWidth - viewport.clientWidth));
+      const extra = (slides.length - 1) * window.innerHeight * SLIDE_SCROLL_VH;
+      setSectionHeight(`${panel.offsetHeight + extra}px`);
+    };
+
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      aria-label="Style carousel"
+      className="relative"
+      style={{ height: sectionHeight }}
+    >
+      <div ref={panelRef} className="sticky top-0 z-20 bg-white">
+        <HeroIntro />
+        <div ref={viewportRef} className="overflow-hidden">
+          <div
+            ref={trackRef}
+            className="flex w-max touch-pan-y gap-gutter px-margin"
+            style={{
+              transform: `translate3d(-${progress * maxOffset}px, 0, 0)`,
+            }}
+          >
+            <SlideList />
+          </div>
+        </div>
+        <CarouselIndicator total={slides.length} progress={progress} />
+      </div>
+    </section>
+  );
+}
+
+export function StyleCarousel() {
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    setReducedMotion(
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    );
+  }, []);
+
+  if (reducedMotion) return <NativeStyleCarousel />;
+  return <ForcedStyleCarousel />;
 }

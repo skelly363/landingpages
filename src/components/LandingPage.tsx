@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { CastTabbySection } from "@/components/sections/CastTabbySection";
 import { CoachSpotifySection } from "@/components/sections/CoachSpotifySection";
-import { HeroIntro } from "@/components/sections/HeroIntro";
 import { PlaylistsSection } from "@/components/sections/PlaylistsSection";
 import { SpotifyAppSection } from "@/components/sections/SpotifyAppSection";
 import { StyleCarousel } from "@/components/sections/StyleCarousel";
@@ -17,7 +16,6 @@ export function LandingPage() {
 
   return (
     <MobilePage>
-      <HeroIntro />
       <StyleCarousel />
       <CoachSpotifySection />
       <PlaylistsSection />

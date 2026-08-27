@@ -10,7 +10,7 @@ type PageSectionProps = {
 
 export function MobilePage({ children }: { children: ReactNode }) {
   return (
-    <main className="min-h-screen w-full overflow-x-hidden bg-white [container-type:inline-size]">
+    <main className="min-h-screen w-full overflow-x-clip bg-white [container-type:inline-size]">
       {children}
     </main>
   );

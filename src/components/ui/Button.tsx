@@ -36,7 +36,7 @@ export function Button({
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className}`;
   const inner = (
     <>
-      <span className={size === "compact" ? "" : "translate-y-[2px]"}>
+      <span className="translate-y-[2px]">
         {children}
       </span>
       <Icon name="add" size={size === "compact" ? 16 : 18} />

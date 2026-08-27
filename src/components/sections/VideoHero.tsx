@@ -7,9 +7,20 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SPACING } from "@/lib/spacing";
 import { ASPECT_RATIOS, SECTION_RATIOS } from "@/lib/aspect-ratios";
 
+const FILM_SCALE_START = 0.86;
+const FILM_SCALE_END = 1;
+
+function filmScrollProgress(el: HTMLElement) {
+  const rect = el.getBoundingClientRect();
+  const vh = window.innerHeight;
+  const start = vh;
+  const end = vh * 0.28;
+  return Math.min(1, Math.max(0, (start - rect.top) / (start - end)));
+}
+
 function FilmMedia() {
   const ref = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
+  const [scale, setScale] = useState(FILM_SCALE_START);
 
   useEffect(() => {
     const el = ref.current;
@@ -17,17 +28,15 @@ function FilmMedia() {
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
-      setScale(1);
+      setScale(FILM_SCALE_END);
       return;
     }
 
     const update = () => {
-      const rect = el.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const start = vh;
-      const end = vh * 0.35;
-      const progress = Math.min(1, Math.max(0, (start - rect.top) / (start - end)));
-      setScale(1 + 0.25 * progress);
+      const progress = filmScrollProgress(el);
+      setScale(
+        FILM_SCALE_START + (FILM_SCALE_END - FILM_SCALE_START) * progress,
+      );
     };
 
     update();
@@ -40,15 +49,15 @@ function FilmMedia() {
   }, []);
 
   return (
-    <div ref={ref}>
-      <FilmPlayer
-        src="/videos/video-hero.mp4"
-        poster="/images/video-hero.jpg"
-        ratioClass={ASPECT_RATIOS[SECTION_RATIOS.videoHero]}
-        ariaLabel="Coach presents Live Your Story campaign film"
-        videoClassName="origin-center will-change-transform"
-        videoStyle={{ transform: `scale(${scale})` }}
-      />
+    <div ref={ref} className="w-full">
+      <div className="mx-auto" style={{ width: `${scale * 100}%` }}>
+        <FilmPlayer
+          src="/videos/video-hero.mp4"
+          poster="/images/video-hero.jpg"
+          ratioClass={ASPECT_RATIOS[SECTION_RATIOS.videoHero]}
+          ariaLabel="Coach presents Live Your Story campaign film"
+        />
+      </div>
     </div>
   );
 }
@@ -94,11 +103,9 @@ export function VideoHero() {
         style={{ gap: SPACING.filmStack }}
       >
         <FilmHeading />
-        <Reveal media className="w-full">
-          <FullBleed>
-            <FilmMedia />
-          </FullBleed>
-        </Reveal>
+        <FullBleed>
+          <FilmMedia />
+        </FullBleed>
         <FilmCaption />
       </div>
     </section>
