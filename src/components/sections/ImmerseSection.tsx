@@ -37,7 +37,8 @@ const gridItems: GridItem[] = [
   {
     id: "subway-charms",
     alt: "Coach Tabby bag with charms on the subway",
-    poster: "/images/immerse-5.png",
+    poster: "/images/immerse-5.jpg",
+    videoSrc: "/videos/immerse-5.mp4",
   },
   {
     id: "bus-cast",
