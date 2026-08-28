@@ -2,27 +2,22 @@ import Image from "next/image";
 import { TextLink } from "@/components/ui/Button";
 import { PageSection } from "@/components/layout/Grid";
 import { Reveal } from "@/components/ui/Reveal";
-import { SPACING } from "@/lib/spacing";
 
 export function CoachSpotifySection() {
   return (
-    <PageSection className="pt-12 pb-10">
+    <PageSection className="pb-2 pt-12">
       <Reveal
         stagger
-        className="mx-auto flex max-w-content flex-col items-center text-center"
-        style={{ gap: SPACING.headingToBody }}
+        className="mx-auto flex max-w-content flex-col items-center gap-4 text-center"
       >
         <Image
-          src="/images/spotify-wordmark.png"
-          alt="Spotify"
-          width={116}
-          height={46}
-          className="h-[46px] w-[116px] object-contain"
+          src="/images/coach-spotify-lockup.svg"
+          alt="Coach X Spotify"
+          width={274}
+          height={32}
+          className="h-8 w-[274px] object-contain"
         />
-        <h2 className="font-coach-extended text-lg uppercase leading-normal">
-          Coach X Spotify
-        </h2>
-        <p className="text-coach-body max-w-[333px]">
+        <p className="max-w-[333px] text-coach-body-sm tracking-[-0.24px]">
           Style and music help us express ourselves with confidence and connect
           with one another. This season, Coach partners with Spotify to bring
           you customized playlists inspired by your listening style.

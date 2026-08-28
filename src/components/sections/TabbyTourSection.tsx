@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useRef } from "react";
 import { TextLink } from "@/components/ui/Button";
 import { MediaFrame } from "@/components/ui/MediaFrame";
@@ -20,10 +21,15 @@ const tourDates = [
 ];
 
 const tourImages = [
-  { src: "/images/tabby-tour.jpg", alt: "The Tabby Tour campaign" },
-  { src: "/images/tour-bus.jpg", alt: "Inside the Coach x Spotify tour bus" },
-  { src: "/images/playlist-1.jpg", alt: "Tabby Tour live styling" },
-  { src: "/images/tour-crowd.jpg", alt: "Tabby Tour crowd" },
+  { src: "/images/tour-vinyl.jpg", alt: "Browsing vinyl records at the Tabby Tour" },
+  { src: "/images/tour-bus-interior.jpg", alt: "Inside the Coach x Spotify tour bus" },
+  {
+    src: "/images/tour-crowdsurf.jpg",
+    alt: "Crowd surfing at a Tabby Tour stop",
+    showPlay: true,
+  },
+  { src: "/images/tour-posters.jpg", alt: "Event posters at the Tabby Tour" },
+  { src: "/images/tour-polaroid.jpg", alt: "Fans at a Tabby Tour concert" },
 ];
 
 function tourCardWidth(track: HTMLDivElement) {
@@ -113,7 +119,19 @@ export function TabbyTourSection() {
                 ratio={SECTION_RATIOS.tabbyTourBanner}
                 fullWidth
                 sizes="calc(100vw - 35px)"
-              />
+              >
+                {image.showPlay && (
+                  <div className="absolute bottom-4 right-4 z-10">
+                    <Image
+                      src="/images/play-button.svg"
+                      alt=""
+                      width={39}
+                      height={39}
+                      className="size-[39px]"
+                    />
+                  </div>
+                )}
+              </MediaFrame>
             </article>
           ))}
         </CarouselTrack>
@@ -126,7 +144,8 @@ export function TabbyTourSection() {
         <Reveal className="mt-4">
           <p className="text-coach-body leading-[1.4]">
             Experience the campaign in person as Coach and Spotify take the
-            season around the world with live music, styling, personalization.
+            season around the world with live music, styling, personalization and
+            more.
           </p>
         </Reveal>
 

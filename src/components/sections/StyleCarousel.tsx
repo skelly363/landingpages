@@ -14,13 +14,15 @@ import {
 import { Icon } from "@/components/ui/Icon";
 import { MediaFrame } from "@/components/ui/MediaFrame";
 import { Reveal } from "@/components/ui/Reveal";
-import { SECTION_RATIOS } from "@/lib/aspect-ratios";
+import { ASPECT_RATIOS, SECTION_RATIOS } from "@/lib/aspect-ratios";
 
 type StyleSlide = {
   id: string;
   image: string;
+  /** When set, replaces the poster image with an autoplaying loop. */
+  videoSrc?: string;
   alt: string;
-  variant: "intro" | "film" | "cta";
+  variant: "intro" | "film" | "cta" | "photo" | "play";
   title?: string;
   description?: string;
   filmTitle?: string;
@@ -36,7 +38,7 @@ const slides: StyleSlide[] = [
     variant: "intro",
     title: "Style Your Story",
     description:
-      "New Tabbys and picks for every mood, sound and side of you.",
+      "New Tabbys and more for every mood, sound and side of you.",
   },
   {
     id: "tabby-cream",
@@ -52,17 +54,11 @@ const slides: StyleSlide[] = [
     },
   },
   {
-    id: "lilas-film",
-    image: "/images/hero-jp.jpg",
-    alt: "Coach presents Lilas Ikuta",
-    variant: "film",
-    filmTitle: "Lilas Ikuta",
-  },
-  {
     id: "coach-tags",
     image: "/images/hero-video.jpg",
-    alt: "Coach bag charms and tags",
-    variant: "intro",
+    videoSrc: "/videos/redshirt.mp4",
+    alt: "Campaign cast member in a red sweater with Coach charms",
+    variant: "photo",
   },
   {
     id: "tabby-navy",
@@ -80,6 +76,54 @@ const slides: StyleSlide[] = [
 ];
 
 const SLIDE_COUNT = slides.length;
+
+function CarouselMedia({
+  slide,
+  fillViewport,
+  children,
+}: {
+  slide: StyleSlide;
+  fillViewport?: boolean;
+  children?: React.ReactNode;
+}) {
+  const ratio = SECTION_RATIOS.styleCarousel;
+  const frameClass = fillViewport
+    ? "relative h-full w-full overflow-hidden bg-neutral-200"
+    : `relative w-full overflow-hidden bg-neutral-200 ${ASPECT_RATIOS[ratio]}`;
+
+  if (slide.videoSrc) {
+    return (
+      <div className={frameClass}>
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          src={slide.videoSrc}
+          poster={slide.image}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-label={slide.alt}
+        />
+        {children}
+      </div>
+    );
+  }
+
+  return (
+    <MediaFrame
+      src={slide.image}
+      alt={slide.alt}
+      ratio={fillViewport ? undefined : ratio}
+      fullWidth
+      priority={slide.id === "style-story"}
+      sizes="calc(100vw - 35px)"
+      className={fillViewport ? "h-full w-full" : undefined}
+    >
+      {children}
+    </MediaFrame>
+  );
+}
 
 function CarouselSlide({
   slide,
@@ -99,15 +143,7 @@ function CarouselSlide({
           : "w-carousel-style shrink-0 snap-start"
       }
     >
-      <MediaFrame
-        src={slide.image}
-        alt={slide.alt}
-        ratio={fillViewport ? undefined : SECTION_RATIOS.styleCarousel}
-        fullWidth
-        priority={slide.id === "style-story"}
-        sizes="calc(100vw - 35px)"
-        className={fillViewport ? "h-full w-full" : undefined}
-      >
+      <CarouselMedia slide={slide} fillViewport={fillViewport}>
         {slide.variant === "cta" && slide.detailCard && (
           <>
             <HotspotDetailCard
@@ -156,7 +192,19 @@ function CarouselSlide({
             </button>
           </div>
         )}
-      </MediaFrame>
+
+        {slide.variant === "play" && !slide.videoSrc && (
+          <div className="absolute left-[calc(50%-54px)] top-[112px] z-10">
+            <button
+              type="button"
+              aria-label="Play film"
+              className="flex size-[42px] items-center justify-center rounded-full bg-white/90 text-coach-black"
+            >
+              <Icon name="play_circle" size={42} />
+            </button>
+          </div>
+        )}
+      </CarouselMedia>
     </article>
   );
 }
@@ -192,7 +240,13 @@ function ForcedStyleCarousel() {
       className="relative"
       style={{ height: `calc(${SLIDE_COUNT} * 100dvh)` }}
     >
-      <div className="sticky top-0 z-20 flex h-dvh flex-col overflow-hidden bg-white">
+      <div
+        className="sticky z-20 flex flex-col overflow-hidden bg-white"
+        style={{
+          top: "var(--coach-header-height)",
+          height: "calc(100dvh - var(--coach-header-height))",
+        }}
+      >
         <HeroIntro compact />
         <div className="min-h-0 flex-1 overflow-hidden">
           <div
