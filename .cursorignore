@@ -1,0 +1,14 @@
+# Dependencies and build output — keep the agent out of generated/large dirs
+node_modules/
+.next/
+out/
+build/
+coverage/
+
+# TypeScript and tooling caches
+*.tsbuildinfo
+.fallow/
+
+# Logs and local env
+*.log
+.env*
