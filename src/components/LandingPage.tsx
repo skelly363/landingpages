@@ -10,13 +10,21 @@ import { StyleCarousel } from "@/components/sections/StyleCarousel";
 import { TabbyTourSection } from "@/components/sections/TabbyTourSection";
 import { VideoHero } from "@/components/sections/VideoHero";
 import { CollectionDrawer } from "@/components/ui/CollectionDrawer";
+import { CoachHeader } from "@/components/layout/CoachHeader";
 import { MobilePage } from "@/components/layout/Grid";
+import { YouTubeEntryScreen } from "@/components/YouTubeEntryScreen";
 
 export function LandingPage() {
+  const [entered, setEntered] = useState(false);
   const [collectionOpen, setCollectionOpen] = useState(false);
+
+  if (!entered) {
+    return <YouTubeEntryScreen onVisitSite={() => setEntered(true)} />;
+  }
 
   return (
     <MobilePage>
+      <CoachHeader />
       <HeroIntro />
       <StyleCarousel />
       <VideoHero />

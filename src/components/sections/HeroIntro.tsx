@@ -16,7 +16,7 @@ export function HeroIntro() {
         <h1 className="text-coach-display">Live Your Story</h1>
         <p className="text-coach-body">
           Your style. Your soundtrack. Your story. Discover what happens when
-          they come together for Fall 2026.
+          they come together in our Fall 2026 campaign.
         </p>
       </Reveal>
     </PageSection>

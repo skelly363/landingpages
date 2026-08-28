@@ -9,8 +9,7 @@ export function VideoHero() {
       <Reveal media>
         <FullBleed>
           <FilmPlayer
-            src="/videos/video-hero.mp4"
-            poster="/images/video-hero.jpg"
+            src="/videos/firstvideo.mp4"
             ratioClass={ASPECT_RATIOS[SECTION_RATIOS.videoHero]}
             ariaLabel="Coach presents Live Your Story campaign film"
           />

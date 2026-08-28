@@ -1,7 +1,7 @@
 /** Section spacing derived from updated Figma frame (UXR A Mobile) */
 export const SPACING = {
-  /** Hero top padding */
-  heroTop: 45,
+  /** Hero top padding — 30px below the 48px nav matches Figma y=78 */
+  heroTop: 30,
   /** Gap between hero copy and style carousel */
   heroBottom: 32,
   /** Standard gap between headline and body copy */
