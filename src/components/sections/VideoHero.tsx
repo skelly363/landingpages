@@ -86,7 +86,7 @@ function FilmCaption() {
     <PageSection>
       <Reveal className="mx-auto max-w-[322px] text-center">
         <p className="text-coach-body">
-          Starring Elle Fanning and a cast of Coach characters, follow a
+          Starring Elle Fanning and a cast of characters, follow their
           journey aboard the Coach tour bus and discover the magic of
           connecting IRL.
         </p>

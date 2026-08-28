@@ -20,6 +20,10 @@ export function SpotifyAppSection() {
           height={192}
           className="size-48 bg-white"
         />
+        <p className="text-coach-body-sm leading-[1.4]">
+          Use the code to visit Spotify, reveal your Courage Sign and get a
+          personalized playlist to match.
+        </p>
         <TextLink href="#" className="text-coach-body-sm">
           Go to Spotify mobile app
         </TextLink>

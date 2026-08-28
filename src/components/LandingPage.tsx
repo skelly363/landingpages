@@ -9,6 +9,7 @@ import { StyleCarousel } from "@/components/sections/StyleCarousel";
 import { TabbyTourSection } from "@/components/sections/TabbyTourSection";
 import { VideoHero } from "@/components/sections/VideoHero";
 import { CollectionDrawer } from "@/components/ui/CollectionDrawer";
+import { CoachHeader } from "@/components/layout/CoachHeader";
 import { MobilePage } from "@/components/layout/Grid";
 
 export function LandingPage() {
@@ -16,6 +17,7 @@ export function LandingPage() {
 
   return (
     <MobilePage>
+      <CoachHeader />
       <StyleCarousel />
       <CoachSpotifySection />
       <PlaylistsSection />

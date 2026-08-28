@@ -15,7 +15,7 @@ export function CastTabbySection({
         <FullBleed>
           <MediaFrame
             src="/images/cast-tabby.jpg"
-            alt="Tabbys inspired by the cast"
+            alt="The Artist Tabby Collection"
             ratio={SECTION_RATIOS.fullBleedCta}
             fullWidth
             sizes="100vw"
@@ -25,10 +25,10 @@ export function CastTabbySection({
 
             <div className="absolute inset-x-0 top-1/2 z-10 -translate-y-1/2 px-margin text-center text-white">
               <Reveal stagger>
-                <p className="text-coach-eyebrow">Tabbys, Inspired by the Cast</p>
+                <p className="text-coach-eyebrow">The Artist Tabby Collection</p>
                 <p className="mx-auto mt-4 max-w-[250px] font-coach-extended text-lg leading-normal text-white">
-                  Special-edition Tabby bags that take their cues from the
-                  personal style and stories of the stars of our campaign.
+                  Special-edition bags inspired by the personal style and
+                  stories of the stars of our campaign.
                 </p>
               </Reveal>
             </div>

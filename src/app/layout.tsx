@@ -5,7 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Live Your Story | Coach x Spotify",
   description:
-    "Your style. Your soundtrack. Your story. Discover what happens when they come together for Fall 2026.",
+    "Your style. Your soundtrack. Your story. Discover what happens when they come together in our Fall 2026 campaign.",
 };
 
 export const viewport: Viewport = {

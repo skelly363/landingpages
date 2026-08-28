@@ -9,62 +9,121 @@ import { MediaFrame } from "@/components/ui/MediaFrame";
 import { Reveal } from "@/components/ui/Reveal";
 import { SECTION_RATIOS } from "@/lib/aspect-ratios";
 
-const playlists = [
-  { image: "/images/playlist-1.jpg", name: "Playlist Name", label: "Tktkt", persona: "Persona" },
-  { image: "/images/playlist-2.jpg", name: "Playlist Name", label: "Tktkt", persona: "Persona" },
-  { image: "/images/playlist-3.jpg", name: "Playlist Name", label: "Tktkt", persona: "Persona" },
-  { image: "/images/playlist-4.jpg", name: "Playlist Name", label: "Tktkt", persona: "Persona" },
+type Playlist = {
+  id: string;
+  image: string;
+  alt: string;
+  name: string;
+  persona: string;
+  accent: string;
+  icon: string;
+  iconWidth: number;
+  iconHeight: number;
+  iconClassName?: string;
+  imageStyle?: { objectPosition: string };
+};
+
+const playlists: Playlist[] = [
+  {
+    id: "repeat-offender",
+    image: "/images/playlist-1.jpg",
+    alt: "Campaign still for the Repeat Offender playlist",
+    name: "Playlist Name",
+    persona: "Repeat Offender",
+    accent: "#9fd1c6",
+    icon: "/images/persona-repeat-offender.svg",
+    iconWidth: 40,
+    iconHeight: 40,
+    imageStyle: { objectPosition: "28% center" },
+  },
+  {
+    id: "scene-shifter",
+    image: "/images/playlist-3.jpg",
+    alt: "Campaign still for the Scene Shifter playlist",
+    name: "Playlist Name",
+    persona: "Scene Shifter",
+    accent: "#eeb982",
+    icon: "/images/persona-scene-shifter.svg",
+    iconWidth: 41,
+    iconHeight: 57,
+    imageStyle: { objectPosition: "22% center" },
+  },
+  {
+    id: "unhinged-optimist",
+    image: "/images/playlist-4.jpg",
+    alt: "Campaign still for the Unhinged Optimist playlist",
+    name: "Playlist Name",
+    persona: "Unhinged Optimist",
+    accent: "#fc9d97",
+    icon: "/images/persona-unhinged-optimist.svg",
+    iconWidth: 42,
+    iconHeight: 46,
+    imageStyle: { objectPosition: "30% center" },
+  },
+  {
+    id: "wild-card",
+    image: "/images/playlist-2.jpg",
+    alt: "Campaign still for the Wild Card playlist",
+    name: "Playlist Name",
+    persona: "Wild Card",
+    accent: "#f98767",
+    icon: "/images/persona-wild-card.svg",
+    iconWidth: 45,
+    iconHeight: 49,
+    imageStyle: { objectPosition: "35% center" },
+  },
 ];
 
 function SpotifyCard({
   image,
+  alt,
   name,
-  label,
   persona,
-}: {
-  image: string;
-  name: string;
-  label: string;
-  persona: string;
-}) {
+  accent,
+  icon,
+  iconWidth,
+  iconHeight,
+  iconClassName = "",
+  imageStyle,
+}: Playlist) {
   return (
     <article className="w-carousel-playlist shrink-0 snap-start">
       <MediaFrame
         src={image}
-        alt=""
+        alt={alt}
         ratio={SECTION_RATIOS.playlistCard}
         fullWidth
         sizes="calc(100vw - 62px)"
+        imageStyle={imageStyle}
       >
-        <p className="absolute inset-x-0 top-6 z-10 text-center font-coach-extended-bold text-[10px] uppercase tracking-[0.14em] text-white">
+        <p className="absolute inset-x-0 top-6 z-10 text-center font-coach-extended-bold text-[10px] uppercase tracking-[1.4px] text-white">
           {name}
         </p>
-        <div className="absolute inset-x-0 bottom-8 z-10 flex justify-center px-margin">
-          <button
-            type="button"
-            className="flex h-12 w-full max-w-[249px] items-center gap-2.5 rounded-lg border border-coach-spotify bg-black py-1 pl-1.5 pr-1.5"
-          >
-            <Image
-              src="/images/cloud.png"
-              alt=""
-              width={37}
-              height={26}
-              className="h-[26px] w-[37px] shrink-0 object-contain mix-blend-screen"
-            />
-            <span className="flex min-w-0 flex-1 items-center gap-1.5 text-coach-body-sm text-white">
-              <span>{label}</span>
-              <span className="size-0.5 shrink-0 rounded-full bg-white" />
-              <span>{persona}</span>
-            </span>
-            <Image
-              src="/images/spotify-play.svg"
-              alt=""
-              width={28}
-              height={28}
-              className="size-7 shrink-0"
-            />
-          </button>
-        </div>
+        <button
+          type="button"
+          aria-label={`Play ${persona} playlist`}
+          className="absolute bottom-4 left-1/2 z-10 h-[60px] w-[calc(100%-40px)] max-w-[273px] -translate-x-1/2 overflow-hidden rounded-lg border border-solid bg-black"
+          style={{ borderColor: accent }}
+        >
+          <Image
+            src={icon}
+            alt=""
+            width={iconWidth}
+            height={iconHeight}
+            className={`absolute left-[13px] top-1/2 max-h-[56px] -translate-y-1/2 object-contain ${iconClassName}`}
+            style={{ width: iconWidth, height: iconHeight }}
+          />
+          <span className="absolute left-[84px] top-[19px] h-[26px] w-[135px] text-left font-coach-extended text-[13.65px] leading-[26px] text-white">
+            {persona}
+          </span>
+          <Image
+            src="/images/spotify-play.svg"
+            alt=""
+            width={28}
+            height={28}
+            className="absolute top-[16px] right-[12px] size-7"
+          />
+        </button>
       </MediaFrame>
     </article>
   );
@@ -84,9 +143,9 @@ export function PlaylistsSection() {
         Coach x Spotify playlists
       </h2>
       <Reveal media>
-        <CarouselTrack onScroll={handleScroll}>
-          {playlists.map((playlist, index) => (
-            <SpotifyCard key={`${playlist.image}-${index}`} {...playlist} />
+        <CarouselTrack className="!gap-4" onScroll={handleScroll}>
+          {playlists.map((playlist) => (
+            <SpotifyCard key={playlist.id} {...playlist} />
           ))}
         </CarouselTrack>
         <CarouselIndicator total={playlists.length} progress={progress} />

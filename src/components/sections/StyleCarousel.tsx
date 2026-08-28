@@ -20,12 +20,19 @@ type StyleSlide = {
   id: string;
   image: string;
   alt: string;
-  variant: "intro" | "film" | "cta";
+  variant: "intro" | "film" | "cta" | "play";
   title?: string;
   description?: string;
   filmTitle?: string;
   ctaLabel?: string;
   detailCard?: HotspotDetailContent;
+};
+
+const collectionDetailCard: HotspotDetailContent = {
+  title: "The Artist Tabby Collection",
+  description:
+    "Special-edition bags inspired by the personal style and stories of the stars of our campaign.",
+  linkLabel: "Shop The Collection",
 };
 
 const slides: StyleSlide[] = [
@@ -36,7 +43,7 @@ const slides: StyleSlide[] = [
     variant: "intro",
     title: "Style Your Story",
     description:
-      "New Tabbys and picks for every mood, sound and side of you.",
+      "New Tabbys and more for every mood, sound and side of you.",
   },
   {
     id: "tabby-cream",
@@ -44,25 +51,19 @@ const slides: StyleSlide[] = [
     alt: "Cream Tabby bag",
     variant: "cta",
     ctaLabel: "Tabbys, Inspired by the Cast",
-    detailCard: {
-      title: "Tabbys, Inspired by the Cast",
-      description:
-        "Special-edition Tabby bags that take their cues from the personal style and stories of the stars of our campaign.",
-      linkLabel: "Shop Pink Pantheress's Tabby",
-    },
+    detailCard: collectionDetailCard,
   },
   {
-    id: "lilas-film",
+    id: "film-still",
     image: "/images/hero-jp.jpg",
-    alt: "Coach presents Lilas Ikuta",
-    variant: "film",
-    filmTitle: "Lilas Ikuta",
+    alt: "Campaign film still",
+    variant: "intro",
   },
   {
     id: "coach-tags",
     image: "/images/hero-video.jpg",
     alt: "Coach bag charms and tags",
-    variant: "intro",
+    variant: "play",
   },
   {
     id: "tabby-navy",
@@ -70,12 +71,7 @@ const slides: StyleSlide[] = [
     alt: "Navy studded Tabby bag",
     variant: "cta",
     ctaLabel: "Tabbys, Inspired by the Cast",
-    detailCard: {
-      title: "Tabbys, Inspired by the Cast",
-      description:
-        "Special-edition Tabby bags that take their cues from the personal style and stories of the stars of our campaign.",
-      linkLabel: "Shop The Collection",
-    },
+    detailCard: collectionDetailCard,
   },
 ];
 
@@ -156,6 +152,18 @@ function CarouselSlide({
             </button>
           </div>
         )}
+
+        {slide.variant === "play" && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center">
+            <button
+              type="button"
+              aria-label="Play film"
+              className="flex size-[42px] items-center justify-center rounded-full bg-white/90 text-coach-black"
+            >
+              <Icon name="play_circle" size={42} />
+            </button>
+          </div>
+        )}
       </MediaFrame>
     </article>
   );
@@ -192,7 +200,13 @@ function ForcedStyleCarousel() {
       className="relative"
       style={{ height: `calc(${SLIDE_COUNT} * 100dvh)` }}
     >
-      <div className="sticky top-0 z-20 flex h-dvh flex-col overflow-hidden bg-white">
+      <div
+        className="sticky z-20 flex flex-col overflow-hidden bg-white"
+        style={{
+          top: "var(--coach-header-height)",
+          height: "calc(100dvh - var(--coach-header-height))",
+        }}
+      >
         <HeroIntro compact />
         <div className="min-h-0 flex-1 overflow-hidden">
           <div

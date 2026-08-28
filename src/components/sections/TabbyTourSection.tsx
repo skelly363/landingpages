@@ -126,7 +126,8 @@ export function TabbyTourSection() {
         <Reveal className="mt-4">
           <p className="text-coach-body leading-[1.4]">
             Experience the campaign in person as Coach and Spotify take the
-            season around the world with live music, styling, personalization.
+            season around the world with live music, styling, personalization
+            and more.
           </p>
         </Reveal>
 

@@ -109,13 +109,13 @@ function DrawerSheet({ open }: { open: boolean }) {
     >
       <div className="flex-1 overflow-y-auto overscroll-contain pb-12 pt-6">
         <div className="flex flex-col items-center gap-4 px-margin text-center">
-          <p className="text-coach-eyebrow">Tabbys, Inspired by the Cast</p>
+          <p className="text-coach-eyebrow">The Artist Tabby Collection</p>
           <h2
             id="collection-drawer-title"
             className="max-w-[322px] font-coach-extended text-lg leading-normal"
           >
-            Special-edition Tabby bags that take their cues from the personal
-            style and stories of the stars of our campaign.
+            Special-edition bags inspired by the personal style and stories of
+            the stars of our campaign.
           </h2>
         </div>
         <DrawerBagList />

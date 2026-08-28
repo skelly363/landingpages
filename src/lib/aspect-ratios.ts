@@ -8,6 +8,7 @@ export const ASPECT_RATIOS = {
   "3:4": "aspect-[3/4]",
   "9:16": "aspect-[9/16]",
   "16:9": "aspect-[16/9]",
+  "313:386": "aspect-[313/386]",
 } as const;
 
 export type AspectRatio = keyof typeof ASPECT_RATIOS;
@@ -18,6 +19,6 @@ export const SECTION_RATIOS = {
   videoHero: "9:16",
   immerseGrid: "3:4",
   tabbyTourBanner: "4:5",
-  playlistCard: "4:5",
+  playlistCard: "313:386",
   fullBleedCta: "9:16",
 } as const satisfies Record<string, AspectRatio>;

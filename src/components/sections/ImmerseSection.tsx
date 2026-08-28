@@ -24,11 +24,11 @@ export function ImmerseSection() {
           style={{ gap: SPACING.headingToBody, maxWidth: SPACING.immerseCopyWidth }}
         >
           <h2 className="font-coach-extended text-lg leading-snug">
-            Immerse yourself in the world of Live Your Story.
+            Where will the story take you?
           </h2>
           <p className="text-coach-body-sm">
-            Watch the films and meet our cast of characters, discover IRL events,
-            and find the pieces that help you express yourself.
+            Immerse yourself in the world of Live Your Story. Watch the films
+            and meet the cast of artists—and our community of music lovers.
           </p>
         </Reveal>
       </div>

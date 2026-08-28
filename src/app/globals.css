@@ -21,6 +21,7 @@
   /* Carousel peek from the 375px Figma frame, kept as a fixed inset */
   --carousel-peek-style: 23px;
   --carousel-peek-playlist: 50px;
+  --coach-header-height: 48px;
 }
 
 @layer base {
